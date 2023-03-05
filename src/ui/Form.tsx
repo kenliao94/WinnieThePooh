@@ -3,6 +3,7 @@ import WhenBox from './WhenBox';
 import IfBox from './IfBox';
 import ActionBox from './ActionBox';
 import {Task, Expr, Action} from '../AST';
+import { render, screen } from '@testing-library/react';
 
 type FormProps = {
     task: Task,
@@ -36,6 +37,17 @@ class Form extends React.Component<FormProps, FormState> {
             <button onClick={this.handleOnClick}> Save </button>
         </div>);
     }
+
+    // Added test for the Form component
+    test('renders a form with three input boxes', () => {
+        const { getByLabelText } = render(<Form />);
+        const whenBox = getByLabelText(/When/i);
+        const ifBox = getByLabelText(/If/i);
+        const actionBox = getByLabelText(/Action/i);
+        expect(whenBox).toBeInTheDocument();
+        expect(ifBox).toBeInTheDocument();
+        expect(actionBox).toBeInTheDocument();
+    });
 
     handleWhenExpressionChanged(expr: Expr|null) {
         let newTask = {
